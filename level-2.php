@@ -1,3 +1,15 @@
+<?php
+    require('fpdf186/fpdf.php');
+    if (isset($_POST['submit'])) {
+        $text = $_POST['text'];
+
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->Cell(40, 10, $text);
+        $pdf->Output('D', 'output.pdf');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,17 +35,3 @@
     </div>
 </body>
 </html>
-<?php
-require('fpdf186/fpdf.php');
-if (isset($_POST['submit'])) {
-    $text = $_POST['text'];
-
-    $pdf = new FPDF();
-    $pdf->AddPage();
-    $pdf->SetFont('Arial', 'B', 16);
-    $pdf->Cell(40, 10, $text);
-    $pdf->Output('D', 'output.pdf');
-} else {
-    echo "Please submit the form.";
-}
-?>
