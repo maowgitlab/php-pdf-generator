@@ -1,3 +1,41 @@
+<?php
+require('fpdf186/fpdf.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $title = $_POST['title'];
+    $paragraph = $_POST['paragraph'];
+    $date = date('d-m-Y');
+
+    $image = $_FILES['image']['tmp_name'];
+    $imageType = $_FILES['image']['type'];
+
+    if ($imageType != 'image/jpeg' && $imageType != 'image/png') {
+        die("Unsupported image format. Please upload JPEG or PNG.");
+    }
+
+    $pdf = new FPDF();
+    $pdf->AddPage();
+
+    $pdf->SetFont('Arial', 'B', 24);
+    $pdf->Cell(0, 10, $title, 0, 1, 'C');
+    $pdf->Ln(10);
+
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, $date, 0, 1, 'R');
+    $pdf->Ln(10);
+
+    if ($image) {
+        $pdf->Image($image, 10, 50, 190);
+        $pdf->Ln(80);  // Adjust spacing after image
+    }
+
+    $pdf->SetFont('Arial', '', 14);
+    $pdf->MultiCell(0, 10, $paragraph);
+
+    $pdf->Output('D', 'koran.pdf');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,15 +50,15 @@
             <h1 class="text-xl font-bold mb-5">Input Form</h1>
             <form action="generate_pdf.php" method="post" enctype="multipart/form-data">
                 <div class="mb-4">
-                    <label for="title" class="block text-gray-700">Judul:</label>
+                    <label for="title" class="block text-gray-700">Title:</label>
                     <input type="text" id="title" name="title" class="w-full p-2 border border-gray-300 rounded mt-1" required>
                 </div>
                 <div class="mb-4">
-                    <label for="image" class="block text-gray-700">Gambar:</label>
+                    <label for="image" class="block text-gray-700">Image:</label>
                     <input type="file" id="image" name="image" class="w-full p-2 border border-gray-300 rounded mt-1" accept="image/*" required>
                 </div>
                 <div class="mb-4">
-                    <label for="paragraph" class="block text-gray-700">Paragraf:</label>
+                    <label for="paragraph" class="block text-gray-700">Content:</label>
                     <textarea id="paragraph" name="paragraph" class="w-full p-2 border border-gray-300 rounded mt-1" rows="5" required></textarea>
                 </div>
                 <div>
