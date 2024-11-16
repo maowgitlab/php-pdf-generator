@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body class="bg-gray-100">
     <div class="container mx-auto mt-10">
         <div class="max-w-md mx-auto bg-white p-5 rounded shadow-md">
-            <h1 class="text-xl font-bold mb-5">Input Form</h1>
+            <h1 class="text-xl font-bold mb-5">SIMPLE NEWS PDF GENERATOR</h1>
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700">Title:</label>
