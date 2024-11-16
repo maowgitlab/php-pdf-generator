@@ -16,7 +16,7 @@
                     <input type="text" id="text" name="text" class="w-full p-2 border border-gray-300 rounded mt-1" required>
                 </div>
                 <div>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Generate PDF</button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" name="submit">Generate PDF</button>
                 </div>
             </form>
         </div>
@@ -25,8 +25,7 @@
 </html>
 <?php
 require('fpdf186/fpdf.php');
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['submit'])) {
     $text = $_POST['text'];
 
     $pdf = new FPDF();
@@ -34,8 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pdf->SetFont('Arial', 'B', 16);
     $pdf->Cell(40, 10, $text);
     $pdf->Output('D', 'output.pdf');
-
 } else {
-    echo "Invalid request.";
+    echo "Please submit the form.";
 }
 ?>
