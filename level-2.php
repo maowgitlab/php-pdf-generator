@@ -8,10 +8,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $image = $_FILES['image']['tmp_name'];
     $imageType = $_FILES['image']['type'];
+    $imageInfo = getimagesize($image);
 
-    if ($imageType != 'image/jpeg' && $imageType != 'image/png') {
+    if ($imageInfo === false || ($imageType != 'image/jpeg' && $imageType != 'image/png')) {
         die("Unsupported image format. Please upload JPEG or PNG.");
     }
+
+    $tempImagePath = 'temp_image.' . ($imageType == 'image/jpeg' ? 'jpg' : 'png'); 
+    move_uploaded_file($image, $tempImagePath);
 
     $pdf = new FPDF();
     $pdf->AddPage();
@@ -24,15 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pdf->Cell(0, 10, $date, 0, 1, 'R');
     $pdf->Ln(10);
 
-    if ($image) {
-        $pdf->Image($image, 10, 50, 190);
-        $pdf->Ln(80);  // Adjust spacing after image
-    }
+    $pdf->Image($tempImagePath, 10, 50, 190);
+    $pdf->Ln(80);
 
     $pdf->SetFont('Arial', '', 14);
     $pdf->MultiCell(0, 10, $paragraph);
 
     $pdf->Output('D', 'koran.pdf');
+    unlink($tempImagePath);
 }
 ?>
 
@@ -48,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container mx-auto mt-10">
         <div class="max-w-md mx-auto bg-white p-5 rounded shadow-md">
             <h1 class="text-xl font-bold mb-5">Input Form</h1>
-            <form action="generate_pdf.php" method="post" enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700">Title:</label>
                     <input type="text" id="title" name="title" class="w-full p-2 border border-gray-300 rounded mt-1" required>
